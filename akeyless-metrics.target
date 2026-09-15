@@ -1,0 +1,7 @@
+[Unit]
+Description=Akeyless metrics profile (prometheus + grafana)
+Wants=prometheus.service grafana.service
+After=prometheus.service grafana.service
+
+[Install]
+WantedBy=default.target

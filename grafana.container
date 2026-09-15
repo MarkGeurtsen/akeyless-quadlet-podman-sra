@@ -1,0 +1,18 @@
+[Unit]
+Description=Grafana
+
+[Container]
+Image=docker.io/grafana/grafana:latest
+ContainerName=grafana
+Network=internal-metrics.network
+PublishPort=3000:3000
+Volume=grafana-data.volume:/var/lib/grafana
+# Uncomment if you provision dashboards/datasources like in the compose file:
+# Volume=%h/akeyless/metrics/grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+# Volume=%h/akeyless/metrics/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

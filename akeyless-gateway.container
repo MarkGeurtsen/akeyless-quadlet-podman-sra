@@ -1,0 +1,44 @@
+[Unit]
+Description=Akeyless Gateway
+After=akeyless-cache.service
+Requires=akeyless-cache.service
+
+[Container]
+Image=docker.io/akeyless/gateway:4.53.0
+ContainerName=akeyless-gateway
+EnvironmentFile=/Users/user/akeyless/gateway.env
+EnvironmentFile=/Users/user/akeyless/cache.env
+Network=internal-net.network
+Network=internal-metrics.network
+PublishPort=5696:5696
+PublishPort=8443:8000
+PublishPort=8080:8080
+PublishPort=8889:8889
+Volume=/Users/user/akeyless/certs/cert.crt:/home/akeyless/.akeyless/akeyless-api-cert.crt:ro
+Volume=/Users/user/akeyless/certs/key.pem:/home/akeyless/.akeyless/akeyless-api-cert.key:ro
+
+# --- Health check, translated 1:1 from the compose healthcheck block ---
+HealthCmd=curl -f http://localhost:8080/health
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=60s
+
+# --- This is the piece that replaces "condition: service_healthy" ---
+# With Notify=healthy, podman only sends systemd's READY=1 once the
+# container's own healthcheck reports "healthy". Any unit that does
+# After=/Requires=akeyless-gateway.service will therefore block until
+# the gateway is actually healthy, not just "started" - same behavior
+# compose gave the SRA services via condition: service_healthy.
+Notify=healthy
+
+PodmanArgs=--platform=linux/amd64
+
+[Service]
+Restart=always
+# Health checks can legitimately take >90s (start_period=60s + retries),
+# give systemd enough patience before it decides startup failed.
+TimeoutStartSec=180
+
+[Install]
+WantedBy=default.target

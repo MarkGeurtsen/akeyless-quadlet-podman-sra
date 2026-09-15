@@ -1,0 +1,6 @@
+[Unit]
+Description=Akeyless metrics network (gateway, prometheus, grafana)
+
+[Network]
+NetworkName=internal-metrics
+Driver=bridge

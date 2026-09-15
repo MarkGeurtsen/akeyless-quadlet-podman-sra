@@ -1,0 +1,22 @@
+[Unit]
+Description=Akeyless SRA Web
+After=akeyless-cache.service akeyless-gateway.service
+Requires=akeyless-cache.service akeyless-gateway.service
+
+[Container]
+Image=docker.io/akeyless/zero-trust-bastion:latest
+ContainerName=akeyless-sra-web
+EnvironmentFile=/Users/user/akeyless/sra.env
+EnvironmentFile=/Users/user/akeyless/gateway.env
+EnvironmentFile=/Users/user/akeyless/cache.env
+Environment=REMOTE_ACCESS_TYPE=web
+Environment=DEBUG=true
+Network=internal-net.network
+PublishPort=8888:8888
+PodmanArgs=--platform=linux/amd64
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

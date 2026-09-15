@@ -1,0 +1,24 @@
+[Unit]
+Description=Akeyless SRA SSH
+After=akeyless-cache.service akeyless-gateway.service
+Requires=akeyless-cache.service akeyless-gateway.service
+
+[Container]
+Image=docker.io/akeyless/zero-trust-bastion:latest
+ContainerName=akeyless-sra-ssh
+EnvironmentFile=/Users/user/akeyless/sra.env
+EnvironmentFile=/Users/user/akeyless/gateway.env
+EnvironmentFile=/Users/user/akeyless/cache.env
+Environment=DEBUG=true
+Network=internal-net.network
+PublishPort=2222:22
+PublishPort=9900:9900
+# Only your SSH CA public key, matching the compose bind mount exactly
+Volume=/Users/mark/akeyless/sshd-config/ca.pub:/var/akeyless/creds/ca.pub:ro
+PodmanArgs=--privileged --platform=linux/amd64
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

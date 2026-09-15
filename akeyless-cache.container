@@ -1,0 +1,20 @@
+[Unit]
+Description=Akeyless Gateway Cache (Redis)
+
+[Container]
+Image=docker.io/library/redis:8.2.2-alpine
+ContainerName=akeyless-cache
+Exec=/bin/sh -c "redis-server --requirepass \"$REDIS_PASS\" --appendonly no --save ''"
+EnvironmentFile=/Users/mark/akeyless/gateway.env
+EnvironmentFile=/Users/mark/akeyless/cache.env
+Network=internal-net.network
+PublishPort=127.0.0.1:6379:6379
+User=65534:65534
+NoNewPrivileges=true
+DropCapability=ALL
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

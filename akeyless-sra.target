@@ -1,0 +1,7 @@
+[Unit]
+Description=Akeyless SRA profile (gateway + web + ssh bastions)
+Wants=akeyless-gateway.service akeyless-sra-web.service akeyless-sra-ssh.service
+After=akeyless-gateway.service akeyless-sra-web.service akeyless-sra-ssh.service
+
+[Install]
+WantedBy=default.target

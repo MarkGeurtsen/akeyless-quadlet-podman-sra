@@ -1,0 +1,6 @@
+[Unit]
+Description=Akeyless internal network (gateway, SRA, cache)
+
+[Network]
+NetworkName=internal-net
+Driver=bridge

@@ -1,0 +1,17 @@
+[Unit]
+Description=Prometheus
+
+[Container]
+Image=docker.io/prom/prometheus:v3.5.0
+ContainerName=prometheus
+Network=internal-metrics.network
+PublishPort=9090:9090
+Volume=%h/akeyless/metrics/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+Volume=prometheus-data.volume:/prometheus
+Exec=--config.file=/etc/prometheus/prometheus.yml
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
